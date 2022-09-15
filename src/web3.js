@@ -31,9 +31,9 @@ function getInfuraProvider(infura) {
 
 function getAlchemyProvider(alchemy) {
   legacyProvider = new Web3(
-    ethers.providers.AlchemyProvider.getUrl('homestead', alchemy).url
+    ethers.providers.AlchemyProvider.getUrl({ name: 'homestead' }, alchemy).url
   )
-  return new ethers.providers.AlchemyProvider('homestead', alchemy)
+  return new ethers.providers.AlchemyProvider(1, alchemy)
 }
 
 export async function setupWeb3({
