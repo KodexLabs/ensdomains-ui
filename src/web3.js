@@ -29,28 +29,38 @@ function getInfuraProvider(infura) {
   return new ethers.providers.InfuraProvider('homestead', infura)
 }
 
+function getAlchemyProvider(alchemy) {
+  legacyProvider = new Web3(
+    ethers.providers.AlchemyProvider.getUrl('homestead', alchemy).url
+  )
+  return new ethers.providers.AlchemyProvider('homestead', alchemy)
+}
+
 export async function setupWeb3({
   customProvider,
   reloadOnAccountsChange = false,
   enforceReadOnly = false,
   enforceReload = false,
-  infura = false
+  infura = false,
+  alchemy = false
 }) {
-  if(enforceReload){
+  if (enforceReload) {
     provider = null
     readOnly = false
     address = null
   }
 
-  if(enforceReadOnly){
+  if (enforceReadOnly) {
     readOnly = true
     address = null
-    if(infura){
+    if (infura) {
       provider = getInfuraProvider(infura)
-    }else{
+    } else if (alchemy) {
+      provider = getAlchemyProvider(alchemy)
+    } else {
       provider = getDefaultProvider()
     }
-    return { provider, signer:undefined }
+    return { provider, signer: undefined }
   }
 
   if (provider) {
@@ -260,6 +270,6 @@ export async function getBlock(number = 'latest') {
 }
 
 // This provider is used to pass to dnsprovejs which only supports web3js provider
-export function getLegacyProvider(){
+export function getLegacyProvider() {
   return legacyProvider
 }
