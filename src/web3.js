@@ -36,13 +36,19 @@ function getAlchemyProvider(alchemy) {
   return new ethers.providers.AlchemyProvider(1, alchemy)
 }
 
+function getLlamaNodesProvider(url) {
+  legacyProvider = new Web3(url)
+  return new ethers.providers.StaticJsonRpcProvider(url, 'homestead')
+}
+
 export async function setupWeb3({
   customProvider,
   reloadOnAccountsChange = false,
   enforceReadOnly = false,
   enforceReload = false,
   infura = false,
-  alchemy = false
+  alchemy = false,
+  llama = false
 }) {
   if (enforceReload) {
     provider = null
@@ -57,6 +63,8 @@ export async function setupWeb3({
       provider = getInfuraProvider(infura)
     } else if (alchemy) {
       provider = getAlchemyProvider(alchemy)
+    } else if (llama) {
+      provider = getLlamaNodesProvider(llama)
     } else {
       provider = getDefaultProvider()
     }

@@ -10,7 +10,8 @@ export async function setupENS({
   enforceReadOnly,
   enforceReload,
   infura,
-  alchemy
+  alchemy,
+  llama
 } = {}) {
   const { provider } = await setupWeb3({
     customProvider,
@@ -18,13 +19,20 @@ export async function setupENS({
     enforceReadOnly,
     enforceReload,
     infura,
-    alchemy
+    alchemy,
+    llama
   })
   const networkId = await getNetworkId()
   const ens = new ENS({ provider, networkId, registryAddress: ensAddress })
   const registrar = await setupRegistrar(ens.registryAddress)
   const network = await getNetwork()
-  return { ens, registrar, provider:customProvider, network, providerObject: provider }
+  return {
+    ens,
+    registrar,
+    provider: customProvider,
+    network,
+    providerObject: provider
+  }
 }
 
 export * from './ens'
